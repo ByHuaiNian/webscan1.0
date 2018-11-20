@@ -1,0 +1,97 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>应用管理</title>
+    <link rel="stylesheet" href="{% static "layui/css/layui.css" %}" media="all">
+<style>
+
+
+</style>
+</head>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+      <button class="layui-btn layui-btn-sm" lay-event="getCheckData" onclick="insert()">新增</button>
+    </div>
+  </script>
+
+<body>
+
+        <div class="layui-tab layui-tab-card" style="margin-top:0px;">
+                <ul class="layui-tab-title">
+                      <li class="layui-this"><i class="layui-icon">&#xe68e;</i><span></span>应用管理</li>
+                </ul>
+            </div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>应用管理</legend>
+    </fieldset>
+
+    <div class="layui-container" style="width:80%;"> 
+
+    </div> 
+    <div class="layui-container" style="width:80%;"> 
+        <table id="demo" lay-filter="test"></table>
+    </div>  
+                       
+<script src="{% static "layui/layui.js"%}"></script>
+<script>
+    layui.use(['jquery','table','layer'], function() {
+            var $ = layui.jquery,
+            table=layui.table,
+            layer=layui.layer;;
+
+            table.render({
+                elem: '#demo'
+                ,url: '/plugin/appConfig_list' //数据接口
+                ,toolbar: '#toolbarDemo'
+                ,page: true //开启分页
+                ,cols: [[ //表头
+                {field: 'id', title: 'ID', width:150, fixed: 'left'}
+                ,{field: 'app_name', title: '应用名'}
+                ,{fixed: 'right', title:'操作', align:'center', toolbar: '#barDemo',width:150}
+                ]]
+            });
+
+
+             table.on('tool(test)', function(obj){
+                var data = obj.data;
+                    if(obj.event === 'edit'){
+                        var id = data.id;
+                        window.location.href="/plugin/appConfig_update_show?id="+id;
+                    }else if(obj.event === 'del'){
+                        layer.confirm('确定要删除吗？', {
+                            btn: ['确认','取消'] //按钮
+                        }, function(index){
+                            var id = data.id;
+                            var jsonval={'id':id};
+                            $.post("/plugin/appConfig_del",jsonval,function(result){
+                                if(result.data=="1"){
+                                    layer.msg("删除成功",{time:1000},function(){
+                                        window.location.href="/plugin/appConfig";
+                                    });
+                                }else{
+                                    layer.msg("删除失败",{time:1000});
+                                }
+                            })
+                        }, function(index){
+                            layer.close(index);
+                        });
+                    }
+            });
+
+    });
+
+            function insert(){
+               window.location.href="/plugin/appConfig_insert_show";
+            }
+
+</script>       
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+</body>
+
+</html>

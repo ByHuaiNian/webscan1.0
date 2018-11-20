@@ -1,0 +1,179 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>扫描信息</title>
+    <link rel="stylesheet" href="{% static "layui/css/layui.css" %}" media="all">
+<style>
+
+
+</style>
+</head>
+
+<body>
+
+        <div class="layui-tab layui-tab-card" style="margin-top:0px;">
+                <ul class="layui-tab-title">
+                      <li class="layui-this"><i class="layui-icon">&#xe68e;</i><span></span>扫描信息</li>
+                </ul>
+            </div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;margin-left:20px;">
+        <legend>{{domain.domain_url}}扫描信息</legend>
+    </fieldset>
+
+    <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;margin-left:20px;">
+        <legend>网站信息</legend>
+        <div class="layui-container" style="width:60%;margin-left:15px;">
+                <div class="layui-row" >
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="200">
+                            <col width="200">
+                            <col width="200">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Server</th>
+                                <th>Ip</th>
+                            </tr> 
+                        </thead>
+                        <tbody class="info">
+                            <tr>
+                                <td>{{domain.domain_title}}</td><td>{{domain.domain_server}}</td><td>{{domain.domain_ip}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </fieldset>
+
+    {% if domain.pro_id.pro_is_port == 1 %}
+    <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;margin-left:20px;">
+            <legend>端口扫描结果</legend>
+                <div class="layui-container" style="width:60%;margin-left:15px;">
+                        <div class="layui-row" >
+                        {% if port_info %}
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="300">
+                                    <col width="100">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>port</th>
+                                        <th>status</th>
+                                    </tr> 
+                                </thead>
+                                <tbody class="info">
+                                    {% for info in port_info%}
+                                        <tr>
+                                        <td>{{info.port_name}}</td>
+                                        <td>open</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                        <br/>
+                        <label class="layui-form-label">暂无</label>
+                        <br/>
+                        {% endif %}
+                        </div>
+                </div>
+    </fieldset>
+    {% endif %}
+
+    {% if domain.pro_id.pro_is_dir == 1 %}
+    <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;margin-left:20px;">
+            <legend>目录扫描结果</legend>
+                <div class="layui-container" style="width:60%;margin-left:15px;">
+                        <div class="layui-row" >
+                        {% if dir_info %}
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="300">
+                                    <col width="100">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>url</th>
+                                        <th>status</th>
+                                    </tr> 
+                                </thead>
+                                <tbody class="info">
+                                    {% for info in dir_info%}
+                                        <tr>
+                                        <td>{{info.dir_name}}</td>
+                                        <td>{{info.dir_status}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                        <br/>
+                        <label class="layui-form-label">暂无</label>
+                        <br/>
+                        {% endif %}
+                        </div>
+                </div>
+    </fieldset>
+    {% endif %}
+
+    {% if domain.pro_id.pro_is_poc == 1 %}
+    <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;margin-left:20px;">
+            <legend>插件扫描结果</legend>
+                <div class="layui-container" style="width:60%;margin-left:15px;">
+                        <div class="layui-row" >
+                        {% if poc_info %}
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="100">
+                                    <col width="100">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>插件名</th>
+                                        <th>应用类型</th>
+                                        <th>返回值</th>
+                                    </tr> 
+                                </thead>
+                                <tbody class="info">
+                                    {% for info in poc_info%}
+                                        <tr>
+                                        <td>{{info.plu_name}}</td>
+                                        <td>{{info.plu_app_type}}</td>
+                                        <td>{{info.plu_return}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                        <br/>
+                        <label class="layui-form-label">暂无</label>
+                        <br/>
+                        {% endif %}
+                        </div>
+                </div>
+    </fieldset>
+    {% endif %}
+
+            
+<script src="{% static "layui/layui.js"%}"></script>
+<script>
+    layui.use(['jquery','table','layer'], function() {
+            var $ = layui.jquery,
+            table=layui.table,
+            layer=layui.layer;
+
+    });
+
+</script>       
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="show">查看</a>
+  </script>
+</body>
+
+</html>

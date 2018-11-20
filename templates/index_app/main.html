@@ -1,0 +1,166 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="{% static "layui/css/layui.css" %}" media="all">
+    <link rel="stylesheet" href="{% static "index_app/css/font-awesome.min.css" %}" media="all">
+
+    <style>
+        .info-box {
+            height: 85px;
+            background-color: white;
+            background-color: #ecf0f5;
+        }
+        
+        .info-box .info-box-icon {
+            border-top-left-radius: 2px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 2px;
+            display: block;
+            float: left;
+            height: 85px;
+            width: 85px;
+            text-align: center;
+            font-size: 45px;
+            line-height: 85px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .info-box .info-box-content {
+            padding: 5px 10px;
+            margin-left: 85px;
+        }
+        
+        .info-box .info-box-content .info-box-text {
+            display: block;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-transform: uppercase;
+        }
+        
+        .info-box .info-box-content .info-box-number {
+            display: block;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .major {
+            font-weight: 10px;
+            color: #01AAED;
+        }
+        
+        .main {
+            margin-top: 25px;
+        }
+        
+        .main .layui-row {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+        <!-- <div class="layui-tab layui-tab-card" style="margin-top:0px;">
+                <ul class="layui-tab-title">
+                  <li class="layui-this"><i class="layui-icon">&#xe68e;</i><span></span>Home</li>
+                </ul>
+        </div> -->
+
+    <div class="layui-tab layui-tab-card" style="margin-top:0px;">
+        <ul class="layui-tab-title">
+              <li class="layui-this"><i class="layui-icon">&#xe68e;</i><span></span>Home</li>
+        </ul>
+    </div>
+
+    <div class="layui-fluid main">
+
+            <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md3">
+                        <div class="info-box">
+                            <span class="info-box-icon" style="background-color:#00c0ef !important;color:white;"><i class="fa fa-bug" aria-hidden="true"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">当前插件数</span>
+                                <span class="info-box-number">{{plu_count}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="layui-col-md3">
+                        <div class="info-box">
+                            <span class="info-box-icon" style="background-color:#dd4b39 !important;color:white;"><i class="fa fa-google-plus" aria-hidden="true"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text"></span>
+                                <span class="info-box-number"></span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="layui-col-md3">
+                        <div class="info-box">
+                            <span class="info-box-icon" style="background-color:#00a65a !important;color:white;"><i class="fa fa-shopping-bag" aria-hidden="true"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">当前项目数</span>
+                                <span class="info-box-number">{{pro_count}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md3">
+                        <div class="info-box">
+                            <span class="info-box-icon" style="background-color:#f39c12 !important;color:white;"><i class="fa fa-server" aria-hidden="true"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">当前任务数</span>
+                                <span class="info-box-number">{{work_count}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <legend>时间戳</legend>
+                      </fieldset>
+                    <ul class="layui-timeline">
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title">2018-8-23</h3>
+                                <p>之前用flask来写感觉不太好就换成了django</p>
+                                <p>大部分时间都用来调试websocket了,为了数据能实时显示,但是一直出bug就先空着了</p>
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title">2018-9-19</h3>
+                                <p>扫描器基本完工~~目前只是测试版~~有些功能还有待完善~</p>
+                                <p>而且插件太少了...以后慢慢增加吧QAQ</p>
+                                <p>首页不知道放啥就放时间戳了...</p>
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title">2018-9-21</h3>
+                                <p>改了两天bug~</p>
+                                <p>扫描子域名刚开始用的celery任务调度代替多线程,但是字典庞大的话任务队列太多了,测试严重影响速度...</p>
+                                <p>最后还是参考lijiejie大佬的代码改成了多线程扫描..放到服务器扫速度贼快.</p>
+                                <p>子域名扫描目前还只是字典爆破,后续会加上一些搜索引擎的搜索.</p>
+                            </div>
+                        </li>
+                    </ul>
+    </div>
+    <script src="{% static "layui/layui.js" %}"></script>
+    <script>
+        layui.use('jquery', function() {
+            var $ = layui.jquery;
+        });
+    </script>
+</body>
+
+</html>

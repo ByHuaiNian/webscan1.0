@@ -1,0 +1,101 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="shortcut icon" href="{% static "images/favicon.ico"%}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Web Scan</title>
+    <link rel="stylesheet" href="{% static "layui/css/layui.css" %}" media="all" />
+    <link rel="stylesheet" href="{% static "index_app/css/app.css" %}" media="all" />
+</head>
+<style>
+
+</style>
+<body class="kit-theme">
+    <div class="layui-layout layui-layout-admin kit-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo"><i class="layui-icon">&#xe857;</i>Web Scan 1.0</div>
+            <div class="layui-logo kit-logo-mobile">Web</div>
+            <ul class="layui-nav layui-layout-right kit-nav">
+                <li class="layui-nav-item">
+                    <a href="javascript:;">
+                        <img src="{% static "images/1.jpg"%}" class="layui-nav-img"> {{uname}}
+                    </a>
+                    <!-- <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" kit-target data-options="{url:'basic.html',icon:'&#xe658;',title:'基本资料',id:'966'}"><span>基本资料</span></a></dd>
+                        <dd><a href="javascript:;">安全设置</a></dd>
+                    </dl> -->
+                </li>
+                <li class="layui-nav-item"><a href="/logout"><i class="layui-icon" aria-hidden="true">&#xe65c;</i> 注销</a></li>
+            </ul>
+        </div>
+
+        <div class="layui-side layui-bg-black kit-side">
+            <div class="layui-side-scroll">
+                <div class="kit-side-fold"><i class="layui-icon" aria-hidden="true">&#xe609;</i></div>
+                <ul class="layui-nav layui-nav-tree" lay-filter="kitNavbar" kit-navbar>
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a class="" href="javascript:;"><i class="layui-icon" aria-hidden="true">&#xe857;</i><span> 我的项目</span></a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="javascript:;" class="geturl" kit-target data-url="/project/projectShow" >
+                                    <i class="layui-icon">&#xe60a;</i><span> 项目列表</span></a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" class="geturl" kit-target data-url="/project/projectAdd" >
+                                    <i class="layui-icon">&#xe654;</i><span> 新建项目</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;"><i class="layui-icon" aria-hidden="true">&#xe631;</i><span> 常用工具</span></a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;" class="geturl" kit-target data-url="/tools/portRetu" >
+                                <i class="layui-icon">&#xe658;</i><span> 端口扫描</span></a></dd>
+                            <dd><a href="javascript:;" class="geturl" kit-target data-url="/tools/dirRetu" >
+                                <i class="layui-icon">&#xe658;</i><span> 目录扫描</span></a></dd>
+                            <dd><a href="javascript:;" class="geturl" kit-target data-url="/plugin/pluginShow" >
+                                <i class="layui-icon">&#xe62c;</i><span> 插件使用</span></a></dd>
+                    </li>
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;"><i class="layui-icon" aria-hidden="true">&#xe628;</i><span> 控制面板</span></a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;" class="geturl" kit-target data-url="/plugin/pluginConfig" >
+                                <i class="layui-icon">&#xe614;</i><span> 插件管理</span></a></dd>
+                            <dd><a href="javascript:;" class="geturl" kit-target data-url="/plugin/appConfig" >
+                                <i class="layui-icon">&#xe614;</i><span> 应用管理</span></a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="layui-body" id="container">
+            <!-- 内容主体区域 -->
+            
+            <iframe src="/mainShow" frameborder="0" id="demoAdmin" style="width: 100%; height: 98%;"></iframe>
+        </div>
+
+        <div class="layui-footer">
+            人道渺渺，仙道莽莽，鬼道乐兮
+        </div>
+        </div>
+    </div>
+
+    <script src="{% static "layui/layui.js" %}"></script>
+    <script>
+        layui.use('element', function(){
+            var element = layui.element,
+                $ = layui.jquery;
+    
+                $('.geturl').on('click', function () {
+                    var url=$(this).attr("data-url");
+                    $("#demoAdmin").attr("src",url);
+                });
+            });
+
+    </script>
+</body>
+
+</html>

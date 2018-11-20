@@ -1,0 +1,130 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>添加插件</title>
+    <link rel="stylesheet" href="{% static "layui/css/layui.css" %}" media="all">
+<style>
+
+
+</style>
+</head>
+
+<body>
+
+        <div class="layui-tab layui-tab-card" style="margin-top:0px;">
+                <ul class="layui-tab-title">
+                      <li class="layui-this"><i class="layui-icon">&#xe68e;</i><span></span>添加插件</li>
+                </ul>
+            </div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>添加插件</legend>
+    </fieldset>
+    <form class="layui-form" action="/plugin/pluginConfig_insert" method="post" enctype="multipart/form-data">
+              <div class="layui-form-item">
+                    <label class="layui-form-label">插件名称</label>
+                    <div class="layui-input-block">
+                      <input type="text" name="plu_name" lay-verify="required"  placeholder="输入插件名" class="layui-input">
+                    </div>
+              </div>
+
+              <div class="layui-form-item">
+                <label class="layui-form-label">漏洞类型</label>
+                <div class="layui-input-inline">
+                    <select name="vul_type" lay-verify="required" lay-filter="appsearch">
+                     {%for k,v in vul_type.items %}
+                      <option value="{{k}}">{{v}}</option>
+                     {%endfor%}
+                    </select>
+                </div>
+              </div>
+              
+              <div class="layui-form-item">
+                <label class="layui-form-label">应用类型</label>
+                <div class="layui-input-inline">
+                    <select name="app_id" lay-verify="required" lay-filter="appsearch">
+                     {%for i in app_list%}
+                      <option value="{{i.id}}">{{i.app_name}}</option>
+                     {%endfor%}
+                    </select>
+                </div>
+              </div>
+
+              <div class="layui-form-item">
+                <label class="layui-form-label">影响版本</label>
+                <div class="layui-input-block">
+                  <input type="text" name="version" placeholder="" class="layui-input">
+                </div>
+             </div>  
+
+             <div class="layui-form-item">
+                <label class="layui-form-label">插件说明</label>
+                <div class="layui-input-block">
+                    <textarea placeholder='' name='plu_content' class='layui-textarea'></textarea>
+                </div>
+             </div>
+
+             <div class="layui-form-item">
+                <label class="layui-form-label">上传插件</label>
+                <div class="layui-input-block">
+                    <input id="dir" type="file" value="" name="plu_dir" lay-verify="required" />
+                </div>
+             </div>
+
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="sub">添加</button>
+              </div>
+            </div>
+          </form>               
+    
+                       
+<script src="{% static "layui/layui.js"%}"></script>
+<script>
+    layui.use(['jquery','form','layer'], function() {
+            var $ = layui.jquery,
+            form=layui.form,
+            layer=layui.layer;
+
+            form.on('submit(sub)', function(data) {
+                var plu_name=data.field.plu_name;
+                var vul_type=data.field.vul_type;
+                var app_id=data.field.app_id;
+                var version=data.field.version;
+                var plu_content=data.field.plu_content;
+                var plu_dir=$("#dir")[0].files[0];
+                
+                var form_data=new FormData();
+                form_data.append('plu_name',plu_name);
+                form_data.append('vul_type',vul_type);
+                form_data.append('app_id',app_id);
+                form_data.append('version',version);
+                form_data.append('plu_content',plu_content);
+                form_data.append('plu_dir',plu_dir);
+
+                var url=data.form.action;
+                $.ajax({
+                    url:url,
+                    type:'post',
+                    contentType:false,
+                    processData:false,
+                    data:form_data,
+                    success:function(result){
+                        if(result.data=="0"){
+                            layer.msg("插件名或文件名重复",{time:2000});
+                        }else{
+                            layer.msg("添加成功",{time:2000});
+                        }
+                    }
+                })
+                return false;
+            });
+    });
+
+</script>       
+
+</body>
+
+</html>

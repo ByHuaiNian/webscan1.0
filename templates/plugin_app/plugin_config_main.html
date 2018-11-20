@@ -1,0 +1,125 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>插件管理</title>
+    <link rel="stylesheet" href="{% static "layui/css/layui.css" %}" media="all">
+<style>
+
+
+</style>
+</head>
+
+<body>
+
+        <div class="layui-tab layui-tab-card" style="margin-top:0px;">
+                <ul class="layui-tab-title">
+                      <li class="layui-this"><i class="layui-icon">&#xe68e;</i><span></span>插件管理</li>
+                </ul>
+            </div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>插件管理</legend>
+    </fieldset>
+    <div class="layui-container" style="width:90%;">
+        <form class="layui-form" action="" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">搜索应用</label>
+                <div class="layui-input-inline">
+                    <select name="app_name" lay-verify="required" lay-filter="appsearch">
+                      <option value="0" selected="selected">全部</option>
+                     {%for i in appList%}
+                      <option value="{{i.id}}">{{i.app_name}}</option>
+                     {%endfor%}
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="layui-container" style="width:95%;"> 
+        <table id="demo" lay-filter="test"></table>
+    </div>              
+<script src="{% static "layui/layui.js"%}"></script>
+<script>
+    layui.use(['jquery','table','form','layer'], function() {
+            var $ = layui.jquery,
+            table=layui.table,
+            form=layui.form,
+            layer=layui.layer;
+
+            table.render({
+                elem: '#demo'
+                ,url: '/plugin/pluginConfig_list' //数据接口
+                ,toolbar: '#toolbarDemo'
+                ,page: true //开启分页
+                ,cols: [[ //表头
+                {field: 'id', title: 'ID',width:80}
+                ,{field: 'plugin_name', title: '插件名称',width:300 }
+                ,{field: 'plugin_content', title: '插件描述' }
+                ,{field: 'plugin_version', title: '影响版本',width:100}
+                ,{field: 'plugin_vultype', title: '漏洞类型',sort: true,width:180}
+                ,{field: 'plugin_app_name', title: '应用类型',sort: true,width:150}
+                ,{fixed: 'right', title:'操作', align:'center', toolbar: '#barDemo',width:150}
+                ]]
+            });
+
+            table.on('tool(test)', function(obj){
+                var data = obj.data;
+                    if(obj.event === 'edit'){
+                        var id = data.id;
+                        window.location.href="/plugin/pluginConfig_update_show?id="+id;
+                    }else if(obj.event === 'del'){
+                        layer.confirm('确定要删除吗？', {
+                            btn: ['确认','取消'] //按钮
+                        }, function(index){
+                            var id = data.id;
+                            var jsonval={'id':id};
+                            $.post("/plugin/pluginConfig_delete",jsonval,function(result){
+                                if(result.data=="1"){
+                                    layer.msg("删除成功",{time:1000},function(){
+                                        window.location.href="/plugin/pluginConfig";
+                                    });
+                                }else{
+                                    layer.msg("删除失败",{time:1000});
+                                }
+                            })
+                        }, function(index){
+                            layer.close(index);
+                        });
+                    }
+                
+            });
+
+            form.on('select(appsearch)', function(data){
+                var app_id = data.value;
+                table.reload('demo', { //表格的id
+                        url:'/plugin/pluginConfig_list',
+                        where: {
+                            'appid':$.trim(app_id)
+                        },
+                        page:{
+                            curr:1,
+                            limit:10
+                        }
+                });
+            });  
+    });
+
+    function insert(){
+        window.location.href="/plugin/pluginConfig_insert_show";
+    }
+
+</script>       
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  </script>
+</body>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+      <button class="layui-btn layui-btn-sm" lay-event="getCheckData" onclick="insert()">新增</button>
+    </div>
+  </script>
+</html>

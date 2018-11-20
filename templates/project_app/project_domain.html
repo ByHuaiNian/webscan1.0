@@ -1,0 +1,84 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>域名列表</title>
+    <link rel="stylesheet" href="{% static "layui/css/layui.css" %}" media="all">
+<style>
+
+
+</style>
+</head>
+
+<body>
+
+        <div class="layui-tab layui-tab-card" style="margin-top:0px;">
+                <ul class="layui-tab-title">
+                      <li class="layui-this"><i class="layui-icon">&#xe68e;</i><span></span>域名列表</li>
+                </ul>
+            </div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>{{pro.pro_name}}的域名列表</legend>
+    </fieldset>
+    <div class="layui-container" style="width:90%;">
+    </div>
+
+    <div class="layui-container" style="width:95%;"> 
+        <table id="demo" lay-filter="test"></table>
+    </div>              
+<script src="{% static "layui/layui.js"%}"></script>
+<script>
+    layui.use(['jquery','table','form','layer'], function() {
+            var $ = layui.jquery,
+            table=layui.table,
+            form=layui.form,
+            layer=layui.layer;
+
+            var id = '{{pro.id}}';
+            table.render({
+                elem: '#demo'
+                ,url: '/project/projectShow_domain_list?id='+id //数据接口
+                ,page: true //开启分页
+                ,cols: [[ //表头
+                {field: 'id', title: 'ID',width:50,style:'display:none;'}
+                ,{field: 'domain_url', title: 'Url',}
+                ,{field: 'domain_title', title: 'Title',width:350 }
+                ,{field: 'domain_server', title: 'Server',width:250,sort:true}
+                ,{field: 'domain_ip', title: 'Ip',width:250,sort:true}
+                ,{field: 'domain_status', title: '扫描状态',width:120,sort:true}
+                ,{fixed: 'right', title:'操作', align:'center', toolbar: '#barDemo',width:30}
+                ]]
+            });
+            $('table.layui-table thead tr th:eq(0)').addClass('layui-hide');
+
+
+
+            table.on('tool(test)', function(obj){
+                    var data = obj.data;
+                    if(obj.event === 'show'){
+                        var id = data.id;
+                        var jsonval={'id':id}
+                        $.post('/project/projectShow_isplu',jsonval,function(result){
+                            if(result.data=="0"){
+                                layer.msg("扫描未完成",{time:1000});
+                            }else{
+                                //window.location.href="/project/projectShow_plu_info?id="+id;
+                                window.open("/project/projectShow_plu_info?id="+id,'_blank').location;
+                            }
+                        });
+                    } 
+                
+                
+            });
+
+    });
+
+</script>       
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="show">查看</a>
+  </script>
+</body>
+
+</html>

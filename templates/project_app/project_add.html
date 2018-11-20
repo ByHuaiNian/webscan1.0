@@ -1,0 +1,171 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>新建项目</title>
+    <link rel="stylesheet" href="{% static "layui/css/layui.css" %}" media="all">
+	<link rel="stylesheet" href="{% static "project_app/css/zTreeStyle/zTreeStyle.css" %}" type="text/css">
+	<script type="text/javascript" src="{% static "project_app/js/jquery-1.4.4.min.js" %}"></script>
+	<script type="text/javascript" src="{% static "project_app/js/jquery.ztree.core.js" %}"></script>
+	<script type="text/javascript" src="{% static "project_app/js/jquery.ztree.excheck.js" %}"></script>
+<style>
+
+
+</style>
+</head>
+
+<body>
+    <div class="layui-tab layui-tab-card" style="margin-top:0px;">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><i class="layui-icon">&#xe68e;</i><span></span>新建项目</li>
+        </ul>
+    </div>
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>新建项目</legend>
+    </fieldset>
+
+
+    <form class="layui-form" action="/project/projectScan" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">项目名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="pro_name" lay-verify="required" placeholder="请输入项目名称" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">扫描类型</label>
+            <div class="layui-input-inline">
+                <select name="is_domain" lay-verify="required" lay-filter="dFlag">
+                  <option value="1" selected="selected">单一扫描(扫描二级域名)</option>
+                  <option value="2">单一扫描(扫描多级域名)</option>
+                  <option value="0">批量扫描(不扫描子域名)</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" id="d_list">
+            <label class="layui-form-label">扫描域名</label>
+            <div class="layui-input-block">
+                <input type="text" name="domain_url" lay-verify="required" placeholder="请输入域名" class="layui-input">
+            </div>
+        </div>
+ 
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">端口扫描</label>
+            <div class="layui-input-block">
+              <input type="checkbox" name="is_port" lay-skin="switch" lay-text="ON|OFF" value="1" checked="checked">
+            </div>
+          </div>
+          
+          <div class="layui-form-item">
+            <label class="layui-form-label">目录扫描</label>
+            <div class="layui-input-block">
+              <input type="checkbox" name="is_dir" lay-skin="switch" lay-text="ON|OFF" value="1" checked="checked">
+            </div>
+          </div>
+
+          <div class="layui-form-item">
+            <label class="layui-form-label">选择插件</label>
+                <div class="layui-input-inline">
+                <ul id="treeDemo" class="ztree"></ul>
+            </div>
+          </div>
+
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button class="layui-btn" lay-submit lay-filter="sub">开始扫描</button>
+        </div>
+      </div>
+    </form> 
+
+    <script>
+    var setting = {
+            async: {
+                enable: true,
+                type: "post",
+                url: "/project/projectAdd_plulist"
+            },
+			check: {
+				enable: true
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			}
+		};
+		
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting);
+		});
+
+        function test(){
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var nodes = treeObj.getCheckedNodes(true);
+            var plu_str = "";
+            for(var i in nodes){
+                id = nodes[i].id;
+                pid = nodes[i].pId;
+                if(pid!=null){
+                    if(i==nodes.length-1){
+                        plu_str = plu_str + id
+                    }else{
+                        plu_str = plu_str + id + ",";
+                    }
+                }
+            }
+            return plu_str;
+        }
+    </script>
+
+<script src="{% static "layui/layui.js" %}"></script>
+<script>
+    layui.use(['jquery','table','layer','form'], function() {
+        var $ = layui.jquery,
+        form=layui.form,
+        table=layui.table;
+
+        
+        form.on('select(dFlag)', function(data){
+            var html ="<label class='layui-form-label'>扫描域名</label>"+
+                        "<div class='layui-input-block'>"+
+                            " <input type='text'name='domain_url' lay-verify='required' placeholder='' class='layui-input'>"+
+                        "</div>";
+            var html2 ="<label class='layui-form-label'>扫描域名</label>"+
+                        "<div class='layui-input-block'>"+
+                            "<textarea placeholder='每行一个扫描对象' name='domain_url' class='layui-textarea'></textarea>"+
+                        "</div>";
+            if(data.value>0){
+                $("#d_list").html(html);
+            }else{
+                $("#d_list").html(html2);
+            }
+        });
+
+        form.on('submit(sub)', function(data){
+            var plu_str = test();
+            var pro_name = data.field.pro_name;
+            var is_domain = data.field.is_domain;
+            var domain_url = data.field.domain_url;
+            var is_port = data.field.is_port;
+            var is_dir = data.field.is_dir;
+            var url = data.form.action;
+            var jsonval = {'pro_name':pro_name,'is_domain':is_domain,'domain_url':domain_url,'is_port':is_port,'is_dir':is_dir,'plu_str':plu_str}
+            $.post(url,jsonval,function(result){
+                if(result.data=="1"){
+                    window.location.href="/project/projectShow";
+                }
+            });
+            return false;
+        });
+    
+    });
+</script>       
+
+</body>
+
+</html>

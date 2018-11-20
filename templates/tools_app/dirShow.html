@@ -1,0 +1,81 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>目录扫描</title>
+    <link rel="stylesheet" href="{% static "layui/css/layui.css" %}" media="all">
+<style>
+
+
+</style>
+</head>
+
+<body>
+    <div class="layui-tab layui-tab-card" style="margin-top:0px;">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><i class="layui-icon">&#xe68e;</i><span></span>目录扫描</li>
+        </ul>
+    </div>
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend id="sta">正在扫描目录<i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop">&#xe63d;</i></legend>
+    </fieldset>
+
+    <fieldset class="layui-elem-field layui-field-title" >
+        <legend>扫描结果(当前扫描目标{{objList.domain}})</legend>
+    </fieldset>
+    <div class="layui-container" style="width:80%;margin-left:15px;">
+        <div class="layui-row" >
+                <table class="layui-table">
+                    <colgroup>
+                    <col width="300">
+                    <col width="100">
+                    <col>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>url</th>
+                        <th>status</th>
+                    </tr> 
+                    </thead>
+                    <tbody class="info">
+                    </tbody>
+                </table>
+        </div>
+    </div>
+
+
+<script src="{% static "layui/layui.js" %}"></script>
+<script>
+    layui.use(['jquery','element','layer','form'], function() {
+        var $ = layui.jquery,
+        form=layui.form;
+        
+        var url="/tools/dirStart";
+        var domain='{{objList.domain}}';
+        var threadSize='{{objList.threadSize}}';
+        var isRecursion='{{objList.isRecursion}}';
+        var isKeywords='{{objList.isKeywords}}';
+        var keywords='{{objList.keywords}}';
+        var dicts='{{objList.dicts|safe}}';
+        var url_status='{{objList.url_status|safe}}';
+
+        var data={'domain':domain,'threadSize':threadSize,'isRecursion':isRecursion,'isKeywords':isKeywords,'keywords':keywords,'dicts':dicts,'url_status':url_status};
+
+        $.post(url,data,function(result){
+            var messList = result.data;
+            console.log(messList);
+            for(var i in messList){
+                $(".info").append("<tr><td>"+messList[i][0]+"</td><td>"+messList[i][1]+"</td></tr>");
+            }
+            $('#sta').html("扫描结束<i class='layui-icon'>&#xe618;</i>");
+        })
+
+    });
+</script>       
+
+</body>
+
+</html>

@@ -1,0 +1,131 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>项目列表</title>
+    <link rel="stylesheet" href="{% static "layui/css/layui.css" %}" media="all">
+<style>
+
+
+</style>
+</head>
+
+<body>
+
+        <div class="layui-tab layui-tab-card" style="margin-top:0px;">
+                <ul class="layui-tab-title">
+                      <li class="layui-this"><i class="layui-icon">&#xe68e;</i><span></span>项目列表</li>
+                </ul>
+            </div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>项目列表</legend>
+    </fieldset>
+    <div class="layui-container" style="width:90%;">
+            <form class="layui-form" action="#" method="post">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">搜索项目</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="pro_name"  placeholder="请输入项目名" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline">
+                        <button class="layui-btn" lay-submit lay-filter="sub">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    <div class="layui-container" style="width:95%;"> 
+        <table id="demo" lay-filter="test"></table>
+    </div>              
+<script src="{% static "layui/layui.js"%}"></script>
+<script>
+    layui.use(['jquery','table','form','layer'], function() {
+            var $ = layui.jquery,
+            table=layui.table,
+            form=layui.form,
+            layer=layui.layer;
+
+            table.render({
+                elem: '#demo'
+                ,url: '/project/projectShow_list' //数据接口
+                ,page: true //开启分页
+                ,cols: [[ //表头
+                {field: 'id', title: 'ID',width:80}
+                ,{field: 'pro_name', title: '项目名称',}
+                ,{field: 'pro_start_time', title: '创建时间',width:200 }
+                ,{field: 'pro_end_time', title: '完成时间',width:200}
+                ,{field: 'pro_is_domain', title: '是否扫描子域名',width:150,sort:true}
+                ,{field: 'pro_domain_status', title: '域名准备状态',width:150,sort:true}
+                ,{field: 'pro_status', title: '项目完成状态',width:150,sort:true}
+                ,{fixed: 'right', title:'操作', align:'center', toolbar: '#barDemo',width:120}
+                ]]
+            });
+
+
+
+            table.on('tool(test)', function(obj){
+                var data = obj.data;
+                    if(obj.event === 'show'){
+                        var id = data.id;
+                        var jsonval={'id':id}
+                        $.post('/project/projectShow_isdomain',jsonval,function(result){
+                            if(result.data=="0"){
+                                layer.msg("子域名未扫描完成",{time:1000});
+                            }else{
+                                window.location.href="/project/projectShow_domain?id="+id;
+                            }
+                        });
+                    }else if(obj.event === 'del'){
+                        layer.confirm('确定要删除吗？', {
+                            btn: ['确认','取消'] //按钮
+                        }, function(index){
+                            var id = data.id;
+                            var jsonval={'id':id};
+                            $.post("/project/projectDel",jsonval,function(result){
+                                if(result.data=="1"){
+                                    layer.msg("删除成功",{time:1000},function(){
+                                        window.location.href="/project/projectShow";
+                                    });
+                                }else{
+                                    layer.msg("删除失败",{time:1000});
+                                }
+                            })
+                        }, function(index){
+                            layer.close(index);
+                        });
+                    }
+                
+            });
+            
+            form.on('submit(sub)', function(data) {
+                    var proname=data.field.pro_name;
+                    if(proname==""){
+                        proname="all";
+                    }
+                    table.reload('demo', { //表格的id
+                        url:'/project/projectShow_list',
+                        where: {
+                            'pro_name':$.trim(proname)
+                        },
+                        page:{
+                            curr:1,
+                            limit:10
+                        }
+                    });
+
+                    return false;
+            });
+
+
+    });
+
+</script>       
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="show">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  </script>
+</body>
+
+</html>

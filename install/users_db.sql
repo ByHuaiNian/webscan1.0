@@ -1,0 +1,1 @@
+INSERT INTO `users_db` (`id`, `username`, `password`) VALUES (1, 'administrator', '123456');

@@ -1,0 +1,156 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <link rel="shortcut icon" href="{% static "images/favicon.ico"%}">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Login - WebScan</title>
+    <script>
+        if (window != window.top) top.location.href = self.location.href;
+    </script>
+    <link href="{% static "layui/css/layui.css" %}" rel="stylesheet" />
+    <link href="{% static "index_app/css/login.css" %}" rel="stylesheet" />
+    <link href="{% static "index_app/css/normalize.css" %}" rel="stylesheet" />
+    <link href="{% static "index_app/css/demo.css" %}" rel="stylesheet" />
+    <link href="{% static "index_app/css/component.css" %}" rel="stylesheet" />
+    <!--[if IE]>
+        <script src="./plugins/sideshow/js/html5.js"></script>
+    <![endif]-->
+    <style>
+        canvas {
+            position: absolute;
+            z-index: -1;
+        }
+        
+        .kit-login-box header h1 {
+            line-height: normal;
+        }
+        
+        .kit-login-box header {
+            height: auto;
+        }
+        
+        .content {
+            position: relative;
+        }
+        
+        .codrops-demos {
+            position: absolute;
+            bottom: 0;
+            left: 40%;
+            z-index: 10;
+        }
+        
+        .codrops-demos a {
+            border: 2px solid rgba(242, 242, 242, 0.41);
+            color: rgba(255, 255, 255, 0.51);
+        }
+        
+        .kit-pull-right button,
+        .kit-login-main .layui-form-item input {
+            background-color: transparent;
+            color: white;
+        }
+        
+        .kit-login-main .layui-form-item input::-webkit-input-placeholder {
+            color: white;
+        }
+        
+        .kit-login-main .layui-form-item input:-moz-placeholder {
+            color: white;
+        }
+        
+        .kit-login-main .layui-form-item input::-moz-placeholder {
+            color: white;
+        }
+        
+        .kit-login-main .layui-form-item input:-ms-input-placeholder {
+            color: white;
+        }
+        
+        .kit-pull-right button:hover {
+            border-color: #009688;
+            color: #009688
+        }
+    </style>
+</head>
+
+
+<body class="kit-login-bg">
+    <div class="container demo-1">
+        <div class="content">
+            <div id="large-header" class="large-header">
+                <canvas id="demo-canvas"></canvas>
+                <div class="kit-login-box">
+                    <header>
+                        <h1>webScan Login</h1>
+                    </header>
+                    <div class="kit-login-main">
+                        <form action="/loginCheck" class="layui-form" method="post">
+                            <div class="layui-form-item">
+                                <label class="kit-login-icon">
+                                    <i class="layui-icon">&#xe612;</i>
+                                </label>
+                                <input type="text" name="username" lay-verify="required" placeholder="username." class="layui-input">
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="kit-login-icon">
+                                    <i class="layui-icon">&#xe642;</i>
+                                </label>
+                                <input type="password" name="password" lay-verify="required" placeholder="password." class="layui-input">
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="kit-pull-right">
+                                    <button class="layui-btn layui-btn-primary" lay-submit lay-filter="login">
+                                        <i class="fa fa-sign-in" aria-hidden="true"></i> 登录
+                                    </button>
+                                </div>
+                                <div class="kit-clear"></div>
+                            </div>
+                        </form>
+                    </div>
+                    <footer>
+                        <p></p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /container -->
+
+    <script src="{% static "layui/layui.js" %}"></script>
+    <script src="{% static "index_app/js/TweenLite.min.js" %}"></script>
+    <script src="{% static "index_app/js/EasePack.min.js" %}"></script>
+    <script src="{% static "index_app/js/rAF.js" %}"></script>
+    <script src="{% static "index_app/js/demo-1.js" %}"></script>
+    <script>
+        layui.use(['layer', 'form'], function() {
+            var layer = layui.layer,
+                $ = layui.jquery,
+                form = layui.form;
+
+            $(window).on('load', function() {
+                form.on('submit(login)', function(data) {
+                    var username=data.field.username;
+                    var password=data.field.password;
+                    var jsonval={"username":username,"password":password};
+                    var url=data.form.action;
+                    $.post(url,jsonval,function(result){
+                        if(result.count!="0"){
+                            window.location.href="/mainIndex";
+                        }else{
+                            layer.msg("用户名或密码错误",{time:1000});
+                        }
+                    })
+                    return false;
+                });
+            }());
+
+        });
+    </script>
+</body>
+
+</html>

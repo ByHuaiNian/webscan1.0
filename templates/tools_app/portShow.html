@@ -1,0 +1,140 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>端口扫描</title>
+    <link rel="stylesheet" href="{% static "layui/css/layui.css" %}" media="all">
+<style>
+
+
+</style>
+</head>
+
+<body>
+    <div class="layui-tab layui-tab-card" style="margin-top:0px;">
+        <ul class="layui-tab-title">
+            <li class="layui-this"><i class="layui-icon">&#xe68e;</i><span></span>端口扫描</li>
+        </ul>
+    </div>
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend id="sta">正在扫描端口<i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop">&#xe63d;</i></legend>
+    </fieldset>
+    <!-- <div class="layui-progress layui-progress-big" lay-showPercent="true" style="width:98%;margin:0 auto;" lay-filter="demo">
+            <div class="layui-progress-bar layui-bg-green" lay-percent="0%"></div>
+    </div> -->
+    <fieldset class="layui-elem-field layui-field-title" >
+        {% if objList.ipType == "1" %}
+        <legend>扫描结果(当前扫描ip:{{objList.ips}})</legend>
+        {% endif %}
+        {% if objList.ipType == "2" %}
+        <legend>扫描结果(当前扫描ip段:{{objList.ips}})</legend>
+        {% endif %}
+    </fieldset>
+
+    <div class="layui-collapse" id="ipt2">
+        {% if objList.ipType == "1" %}
+        <div class="layui-colla-item">
+          <h2 class="layui-colla-title">{{ objList.ips }}</h2>
+          <div class="layui-colla-content layui-show">
+            <table class="layui-table">
+                <colgroup>
+                <col width="100">
+                <col>
+                </colgroup>
+                <tbody class="info">
+                </tbody>
+            </table>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      <button class="layui-btn" id="cl" style="margin-top:20px;margin-left:20px;">结束扫描</button>              
+
+
+
+<script src="{% static "layui/layui.js" %}"></script>
+<script>
+    layui.use(['jquery','element','layer'], function() {
+        var $ = layui.jquery,element=layui.element,layer=layui.layer;
+    
+        var url="/tools/portStart";
+        var ipType='{{objList.ipType}}';
+        var ips='{{objList.ips}}';
+        var threadSize='{{objList.threadSize}}';
+        var portNumber='{{objList.portNumber}}';
+        var portType='{{objList.portType}}';
+        var data={'ipType':ipType,'ips':ips,'threadSize':threadSize,'portNumber':portNumber,'portType':portType};
+
+        $.post(url,data,function(result){
+            var data = result.data;
+            if(result.ipType=="1"){
+                for(var i in data){
+                    $(".info").append("<tr><td>"+data[i][1]+"</td><td>open</td></tr>");
+                }
+            }else{
+                for(var i in data){
+                    var ip = data[i][0];
+                    if(document.getElementById(ip)){
+                        var ipname=ip+"info";
+                        var d1 = document.getElementById(ipname); 
+                        d1.insertAdjacentHTML('beforeend', '<tr><td>'+data[i][1]+'</td><td>open</td></tr>');
+                    } else{
+                        var html='<div class="layui-colla-item" id="'+ip+'">'+
+                                '<h2 class="layui-colla-title">'+ip+'<i class="layui-icon layui-colla-icon">&#xe61a;</i></h2>'+
+                                '<div class="layui-colla-content layui-show">'+
+                                     '<table class="layui-table">'+
+                                        '<colgroup>'+
+                                        '<col width="100">'+
+                                        '<col>'+
+                                        '</colgroup>'+
+                                        '<tbody id="'+ip+'info">'+
+                                        '</tbody>'+
+                                    '</table>'+
+                                '</div>'+
+                                '</div>';
+                        $("#ipt2").append(html);
+                        var ipname=ip+"info";
+                        var d1 = document.getElementById(ipname); 
+                        d1.insertAdjacentHTML('beforeend', '<tr><td>'+data[i][1]+'</td><td>open</td></tr>');
+                    }
+                }
+            }
+            $('#sta').html("扫描结束<i class='layui-icon'>&#xe618;</i>");
+        });
+
+
+
+
+        // //转为json格式
+        // var messageJson = JSON.stringify(data);
+        // $(document).ready(function() {
+        //     var namespace = "/tools/websocket_port?ipType="+ipType+"&ips="+ips+"&threadSize="+threadSize+"&portType="+portType+"&portNumber="+portNumber+"";
+        //     var socket = new WebSocket("ws://" + window.location.host + namespace);
+        //     socket.onopen = function () {
+        //         console.log('WebSocket open');//成功连接上Websocket
+        //     };
+
+        //     socket.onmessage = function (e) {
+        //         var callback = $.parseJSON(e.data);
+        //         console.log('message: ' + callback.endList);//打印服务端返回的数
+
+        //         if(callback.status=="2"){
+        //             socket.send("ping")
+        //         }
+
+        //         socket.close();//关闭websocket
+        //         console.log('websocket已关闭');
+        //     };
+        //     socket.onclose = function(e){
+        //     console.log('Lose Connection!'+e.code);
+        //      }
+        // });
+    });
+</script>       
+
+</body>
+
+</html>
