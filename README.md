@@ -1,4 +1,4 @@
-- 2018-11-20 注：最近比较忙,一直没注意github,发现上传的项目缺失webscan/下的配置文件,是因为项目名和文件夹同名的问题,导致没有上传上来。所以换了个项目名重新上传,对大家搭建项目的不便表示抱歉！有时间会更新的！！！
+## 2018-11-20 注：最近比较忙,一直没注意github,发现上传的项目缺失webscan/下的配置文件,是因为项目名和文件夹同名的问题,导致没有上传上来。所以换了个项目名重新上传,对大家搭建项目的不便表示抱歉！有时间会更新的！！！
 
 ## WEBSCAN 1.0
 基于python2.7.13+django+mysql编写 前端使用layui框架
@@ -8,15 +8,15 @@
 
 ## 截图
 
-![image](https://github.com/ByHuaiNian/webscan/blob/master/install/img/1.png)
+![image](https://github.com/ByHuaiNian/webscan1.0/blob/master/install/img/1.png)
 
-![image](https://github.com/ByHuaiNian/webscan/blob/master/install/img/2.png)
+![image](https://github.com/ByHuaiNian/webscan1.0/blob/master/install/img/2.png)
 
-![image](https://github.com/ByHuaiNian/webscan/blob/master/install/img/3.png)
+![image](https://github.com/ByHuaiNian/webscan1.0/blob/master/install/img/3.png)
 
-![image](https://github.com/ByHuaiNian/webscan/blob/master/install/img/4.png)
+![image](https://github.com/ByHuaiNian/webscan1.0/blob/master/install/img/4.png)
 
-![image](https://github.com/ByHuaiNian/webscan/blob/master/install/img/5.png)
+![image](https://github.com/ByHuaiNian/webscan1.0/blob/master/install/img/5.png)
 
 
 ## 功能描述
