@@ -3,13 +3,14 @@
 
 - 先安装mysql和redis及python2.7.13
 
-- 使用pip安装requirements.txt 中的依赖项 mysql-python需要whl文件安装 已放在文件夹中
+- 使用pip安装requirements.txt 中的依赖项 windows下安装mysql-python需要使用whl文件安装(已放在文件夹中)
 
 - 创建数据库webscan 编码为utf-8
 
 - 在/webscan/settings.py中修改mysql数据库配置
 
-- 根目录下运行python manage.py makemigrations  - python manage.py migrate
+- 根目录下运行python manage.py makemigrations  -> python manage.py migrate(如果出现Can't connect to MySQL server on 'loca
+lhost'报错 请修改/webscan/settings.py中的数据库配置localhost为127.0.0.1)
 
 - 数据库中运行install下的sql文件 plugin_app_db.sql->plugin_db.sql->users_db.sql 默认账户密码 administrator 123456
 
