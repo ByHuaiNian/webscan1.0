@@ -154,4 +154,3 @@ def load_dns_servers():
 
 if __name__=='__main__':
     print init_url("www.baidu.com/")
-    #print is404("http://www.sxufe.edu.cn/")
